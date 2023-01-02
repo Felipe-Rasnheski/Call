@@ -8,6 +8,7 @@ import {
   // eslint-disable-next-line prettier/prettier
   TextInput
 } from '@ignite-ui/react'
+import { useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import { ArrowRight } from 'phosphor-react'
@@ -100,12 +101,16 @@ export default function TimeIntervals() {
 
   const router = useRouter()
 
+  const session = useSession()
+
+  console.log(session.data?.user.id)
+
   async function handleSetTimeIntervals(data: any) {
     const formData = data as TimeIntervalsFormOutput
 
     await api.post('/users/time-intervals', formData)
 
-    await router.push('/register/update-profile')
+    await router.push(`/profile/${session.data?.user.id}`)
   }
 
   return (

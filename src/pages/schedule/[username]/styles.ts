@@ -2,8 +2,9 @@ import { Heading, styled, Text } from '@ignite-ui/react'
 
 export const Container = styled('div', {
   maxWidth: 852,
-  padding: '$8',
+  paddingTop: '$2',
   margin: 'auto',
+  padding: '$8 0',
 })
 
 export const UserHeader = styled('div', {

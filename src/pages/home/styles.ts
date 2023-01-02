@@ -1,17 +1,56 @@
-import { Heading, styled, Text } from '@ignite-ui/react'
+import { Button, Heading, styled, Text } from '@ignite-ui/react'
 
 export const Container = styled('div', {
-  maxWidth: 'calc(100vw - (100vw - 1160px) /2)',
-  height: '100vh',
-  marginLeft: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '$10',
+})
+
+export const Header = styled('header', {
+  display: 'flex',
+  padding: '$4 $10',
+  background: '$black',
+  borderBottom: '1px solid $gray500',
+  justifyContent: 'space-between',
+
+  img: {
+    height: '$10',
+    width: '$10',
+  },
+})
+
+export const Actions = styled('div', {
+  display: 'flex',
+  gap: '$2',
+
+  [`> ${Button}`]: {
+    height: '$10',
+  },
+
+  '@media(max-width: 600px)': {
+    [`> ${Button}`]: {
+      height: '$10',
+
+      '&:first-child': {
+        display: 'none',
+      },
+    },
+  },
+})
+
+export const Main = styled('main', {
   display: 'flex',
   alignItems: 'center',
-  gap: '$20',
+  paddingLeft: '$10',
+  overflow: 'hidden',
+
+  '@media(max-width: 600px)': {
+    paddingRight: '$10',
+  },
 })
 
 export const Hero = styled('div', {
   maxWidth: 480,
-  padding: '0 $10',
 
   [`> ${Heading}`]: {
     '@media(max-width: 600px)': {
@@ -22,12 +61,23 @@ export const Hero = styled('div', {
   [`> ${Text}`]: {
     marginTop: '$2',
     color: '$gray200',
+
+    '@media(max-width: 600px)': {
+      fontSize: '$md',
+    },
   },
 })
 
 export const Preview = styled('div', {
-  paddingRight: '$8',
   overflow: 'hidden',
+  marginLeft: '$12',
+  minWidth: 827,
+  minHeight: 442,
+
+  img: {
+    width: '100%',
+    height: '100%',
+  },
 
   '@media(max-width: 600px)': {
     display: 'none',

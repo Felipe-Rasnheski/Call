@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { ArrowRight } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { api } from '../../../lib/axios'
 import { Form, FormAnnotation } from './styles'
 
 const claimUserNameFormSchema = z.object({
@@ -12,7 +13,8 @@ const claimUserNameFormSchema = z.object({
     .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
     .regex(/^([a-z\\-]+)$/i, {
       message: 'O usuário pode ter apenas letras e hifens.',
-    }),
+    })
+    .transform((userName) => userName.toLowerCase()),
 })
 
 type ClaimUserNameFormSchema = z.infer<typeof claimUserNameFormSchema>
@@ -31,7 +33,11 @@ export function ClaimUserNameForm() {
   async function handleClaimUserName(data: ClaimUserNameFormSchema) {
     const { username } = data
 
-    await router.push(`/register?username=${username}`)
+    await api.post('/user', {
+      username,
+    })
+
+    await router.push('/register/connect-calendar')
   }
 
   return (
@@ -39,12 +45,12 @@ export function ClaimUserNameForm() {
       <Form as="form" onSubmit={handleSubmit(handleClaimUserName)}>
         <TextInput
           size="sm"
-          prefix="ignite.com/"
+          prefix="call.vercelApp/"
           placeholder="seu-usuario"
           {...register('username')}
         />
         <Button size="sm" type="submit" disabled={isSubmitting}>
-          Reservar
+          Cadastrar-se
           <ArrowRight />
         </Button>
       </Form>

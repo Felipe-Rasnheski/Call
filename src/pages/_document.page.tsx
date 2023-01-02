@@ -5,6 +5,7 @@ export default function Document() {
   return (
     <Html lang="pt-Br">
       <Head>
+        <link rel="icon" href="/call.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

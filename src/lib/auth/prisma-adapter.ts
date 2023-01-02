@@ -11,20 +11,36 @@ export function PrismaAdapter(
     async createUser(user) {
       const { '@ignitecall:userId': userIdOnCookies } = parseCookies({ req })
 
-      if (!userIdOnCookies) {
-        throw new Error('user Id not found on cookies!')
-      }
-
-      const prismaUser = await prisma.user.update({
+      const prismaUserExists = await prisma.user.findUnique({
         where: {
           id: userIdOnCookies,
         },
-        data: {
-          name: user.name,
-          email: user.email,
-          avatar_url: user.avatar_url,
-        },
       })
+
+      let prismaUser = null
+
+      if (prismaUserExists) {
+        prismaUser = await prisma.user.update({
+          where: {
+            id: userIdOnCookies,
+          },
+          data: {
+            name: user.name,
+            email: user.email,
+            avatar_url: user.avatar_url,
+          },
+        })
+      } else {
+        prismaUser = await prisma.user.create({
+          data: {
+            name: user.name,
+            username: '',
+            email: user.email,
+            senha: '',
+            avatar_url: user.avatar_url,
+          },
+        })
+      }
 
       destroyCookie({ res }, '@ignitecall:userId', {
         path: '/',

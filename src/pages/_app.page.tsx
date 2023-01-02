@@ -19,7 +19,7 @@ export default function App({
           openGraph={{
             type: 'website',
             locale: 'pt-BR',
-            url: 'https://www.url.ie/',
+            url: 'https://call-feliperasnheski.vercel.app/',
             siteName: 'Call',
           }}
         />

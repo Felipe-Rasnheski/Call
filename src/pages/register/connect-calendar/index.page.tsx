@@ -18,7 +18,7 @@ export default function ConnectCalendar() {
   }
 
   async function handleNavigateNextStep() {
-    await router.push('/register/time-intervals')
+    await router.push('/register/update-user')
   }
 
   return (
@@ -31,7 +31,7 @@ export default function ConnectCalendar() {
             Conecte o seu calendário para verificar automaticamente as horas
             ocupadas e os novos eventos à medida em que são agendados.
           </Text>
-          <MultiStep size={4} currentStep={2} />
+          <MultiStep size={4} currentStep={1} />
         </Header>
 
         <ConnectBox>

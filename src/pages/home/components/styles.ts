@@ -14,6 +14,8 @@ export const Form = styled(Box, {
 
 export const FormAnnotation = styled('div', {
   marginTop: '$2',
+  display: 'flex',
+  justifyContent: 'space-between',
 
   [`> ${Text}`]: {
     color: '$gray400',
