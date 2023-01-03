@@ -103,14 +103,14 @@ export default function TimeIntervals() {
 
   const session = useSession()
 
-  console.log(session.data?.user.id)
-
   async function handleSetTimeIntervals(data: any) {
     const formData = data as TimeIntervalsFormOutput
+    const userId = session.data?.user.id
+    const username = session.data?.user.username
 
-    await api.post('/users/time-intervals', formData)
+    await api.post(`/user/${userId}/time-intervals`, formData)
 
-    await router.push(`/profile/${session.data?.user.id}`)
+    await router.push(`/profile/${username}`)
   }
 
   return (

@@ -1,4 +1,4 @@
-import { Box, styled, Text } from '@ignite-ui/react'
+import { Box, styled } from '@ignite-ui/react'
 import * as Avatar from '@radix-ui/react-avatar'
 import * as Dialog from '@radix-ui/react-dialog'
 
@@ -32,6 +32,11 @@ export const UserAvatar = styled(Avatar.Root, {
     height: '100%',
     objectFit: 'cover',
   },
+
+  svg: {
+    width: '100%',
+    height: '100%',
+  },
 })
 
 export const Description = styled('div', {
@@ -63,10 +68,6 @@ export const Description = styled('div', {
   },
 })
 
-export const Schedules = styled('div', {
-  flex: 1,
-})
-
 export const DialogTrigger = styled(Dialog.Trigger, {
   all: 'unset',
   position: 'absolute',
@@ -90,54 +91,25 @@ export const DialogOverlay = styled(Dialog.Overlay, {
 
 export const DialogContent = styled(Dialog.Content, {
   position: 'fixed',
-  top: '40%',
+  background: 'transparent',
+  top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  background: '#121214',
   zIndex: 3,
-  padding: '1rem',
-  boxShadow: 'none',
+  padding: '2rem 0',
   width: '50vw',
-  borderRadius: '4px',
-  overflowY: 'auto',
-  margin: '2rem',
+  minWidth: 400,
+  height: '100%',
 })
 
-export const FormEdit = styled(Box, {
-  marginTop: '$6',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '$4',
+export const Schedules = styled('div', {
+  flex: 1,
 
-  label: {
+  header: {
+    width: '100%',
     display: 'flex',
-    flexDirection: 'column',
-    gap: '$2',
-  },
-})
-
-export const FormError = styled(Text, {
-  color: '#F75a68',
-})
-
-export const FormActions = styled(Text, {
-  display: 'flex',
-  flexDirection: 'row-reverse',
-  gap: '$2',
-})
-
-export const DialogClose = styled(Dialog.Close, {
-  all: 'unset',
-  position: 'absolute',
-  right: '1rem',
-  background: 'transparent',
-  color: '#f8f9faff',
-  borderRadius: '50%',
-  lineHeight: 0,
-  padding: '0.25rem',
-
-  '&:hover': {
-    cursor: 'pointer',
-    backgroundColor: '#121318ff',
+    h1: {
+      flex: 1,
+    },
   },
 })

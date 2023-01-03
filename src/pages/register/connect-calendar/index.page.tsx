@@ -18,7 +18,7 @@ export default function ConnectCalendar() {
   }
 
   async function handleNavigateNextStep() {
-    await router.push('/register/update-user')
+    await router.push('/register/create-user')
   }
 
   return (

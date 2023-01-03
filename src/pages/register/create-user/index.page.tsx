@@ -22,7 +22,7 @@ import { buildNextAuthOptions } from '../../api/auth/[...nextauth].api'
 import { Container, FormError, Header } from '../styles'
 import { FormAnnotation, ProfileBox } from './styles'
 
-const createUserFormData = z
+const createUserSchema = z
   .object({
     username: z
       .string()
@@ -46,7 +46,7 @@ const createUserFormData = z
     path: ['confirmeSenha'],
   })
 
-type CreateUserFormData = z.infer<typeof createUserFormData>
+type CreateUserFormData = z.infer<typeof createUserSchema>
 
 interface UserFromSession {
   id: string
@@ -56,7 +56,7 @@ interface UserFromSession {
   avatar_url: string
 }
 
-export default function UpdateUser() {
+export default function CreateUser() {
   const session: any = useSession()
 
   const user: UserFromSession = session.data.user
@@ -66,7 +66,7 @@ export default function UpdateUser() {
     register,
     formState: { isSubmitting, errors },
   } = useForm<CreateUserFormData>({
-    resolver: zodResolver(createUserFormData),
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
       name: user.name,
       username: user.username,
@@ -76,7 +76,7 @@ export default function UpdateUser() {
 
   const router = useRouter()
 
-  async function handleUpdateUser(data: CreateUserFormData) {
+  async function handleCreateUser(data: CreateUserFormData) {
     try {
       await api.put('/user/update-user', {
         id: user.id,
@@ -108,7 +108,7 @@ export default function UpdateUser() {
           <MultiStep size={4} currentStep={2} />
         </Header>
 
-        <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateUser)}>
+        <ProfileBox as="form" onSubmit={handleSubmit(handleCreateUser)}>
           <label>
             <Text size="sm">Nome completo</Text>
             <TextInput placeholder="seu nome" {...register('name')} />
