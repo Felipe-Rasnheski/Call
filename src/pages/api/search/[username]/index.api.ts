@@ -15,7 +15,7 @@ export default async function Handler(
   const query = `${username}%`
 
   const users = await prisma.$queryRaw`
-    SELECT username
+    SELECT username, id
     FROM users
     WHERE username like ${query}
     LIMIT 10

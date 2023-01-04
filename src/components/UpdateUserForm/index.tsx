@@ -1,15 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { CheckCircle, EyeClosed, X } from 'phosphor-react'
+import { CheckCircle, EyeClosed, PencilLine, X } from 'phosphor-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { api } from '../../lib/axios'
 import {
+  Container,
   Content,
   DialogClose,
+  DialogContent,
+  DialogOverlay,
+  DialogTrigger,
+  Form,
   FormActions,
-  FormEdit,
   FormError,
   // eslint-disable-next-line prettier/prettier
   Senha
@@ -43,12 +48,15 @@ interface User {
   senha: string
   created_at: Date
   avatar_url: string
-  bio: string
+  bio: string | null
 }
 
-type UpdateProfileForm = { user: User }
+interface UpdateProfileForm {
+  user: User
+  setUser: (user: User) => void
+}
 
-export function UpdateUserForm({ user }: UpdateProfileForm) {
+export function UpdateUserForm({ user, setUser }: UpdateProfileForm) {
   const [passwordHidden, setPasswordHidden] = useState(true)
 
   const {
@@ -67,75 +75,112 @@ export function UpdateUserForm({ user }: UpdateProfileForm) {
   })
 
   async function handleUpdateProfile(data: UpdateProfileData) {
-    console.log(data)
+    try {
+      await api.put('/user/update-user', {
+        id: user.id,
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        senha: data.senha,
+        bio: data.bio,
+      })
+
+      setUser({
+        ...user,
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        senha: data.senha,
+        bio: data.bio,
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
-    <Content>
-      <DialogClose>
-        <X size={28} />
-      </DialogClose>
-      <Dialog.Title className="title">Editar Perfil</Dialog.Title>
+    <Dialog.Root>
+      <DialogTrigger>
+        <PencilLine />
+      </DialogTrigger>
+      <Dialog.Portal>
+        <DialogOverlay />
+        <DialogContent>
+          <Form onSubmit={handleSubmit(handleUpdateProfile)}>
+            <Container>
+              <Content>
+                <DialogClose>
+                  <X size={28} />
+                </DialogClose>
+                <Dialog.Title className="title">Editar Perfil</Dialog.Title>
+                <label>
+                  <Text size="sm">Nome completo</Text>
+                  <TextInput placeholder="seu nome" {...register('name')} />
+                  {errors.name && (
+                    <FormError size="sm">{errors.name.message}</FormError>
+                  )}
+                </label>
+                <label>
+                  <Text size="sm">Nome de usuário</Text>
+                  <TextInput
+                    prefix="call.vercelApp/"
+                    placeholder="seu-usuario"
+                    {...register('username')}
+                  />
+                  {errors.username && (
+                    <FormError size="sm">{errors.username.message}</FormError>
+                  )}
+                </label>
 
-      <FormEdit as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
-        <label>
-          <Text size="sm">Nome completo</Text>
-          <TextInput placeholder="seu nome" {...register('name')} />
-          {errors.name && (
-            <FormError size="sm">{errors.name.message}</FormError>
-          )}
-        </label>
+                <label>
+                  <Text size="sm">Email</Text>
+                  <TextInput type="email" {...register('email')} />
+                  {errors.email && (
+                    <FormError size="sm">{errors.email.message}</FormError>
+                  )}
+                </label>
 
-        <label>
-          <Text size="sm">Nome de usuário</Text>
-          <TextInput
-            prefix="call.vercelApp/"
-            placeholder="seu-usuario"
-            {...register('username')}
-          />
-          {errors.username && (
-            <FormError size="sm">{errors.username.message}</FormError>
-          )}
-        </label>
+                <label>
+                  <Text size="sm">Senha</Text>
+                  <Senha>
+                    <input
+                      type={passwordHidden ? 'password' : 'text'}
+                      autoComplete=""
+                      {...register('senha')}
+                    />
+                    <span onClick={() => setPasswordHidden(!passwordHidden)}>
+                      <EyeClosed size={28} />
+                    </span>
+                  </Senha>
+                  {errors.senha && (
+                    <FormError size="sm">{errors.senha.message}</FormError>
+                  )}
+                </label>
 
-        <label>
-          <Text size="sm">Email</Text>
-          <TextInput type="email" {...register('email')} />
-          {errors.email && (
-            <FormError size="sm">{errors.email.message}</FormError>
-          )}
-        </label>
+                <label>
+                  <Text size="sm">Sobre Você</Text>
+                  <TextArea {...register('bio')} placeholder="Opcional..." />
+                </label>
 
-        <label>
-          <Text size="sm">Senha</Text>
-          <Senha>
-            <input
-              type={passwordHidden ? 'password' : 'text'}
-              autoComplete=""
-              {...register('senha')}
-            />
-            <span onClick={() => setPasswordHidden(!passwordHidden)}>
-              <EyeClosed size={28} />
-            </span>
-          </Senha>
-          {errors.senha && (
-            <FormError size="sm">{errors.senha.message}</FormError>
-          )}
-        </label>
+                <FormActions>
+                  <Button
+                    type="submit"
+                    variant="secondary"
+                    disabled={isSubmitting}
+                  >
+                    Confirmar
+                    <CheckCircle />
+                  </Button>
 
-        <label>
-          <Text size="sm">Sobre Você</Text>
-          <TextArea {...register('bio')} placeholder="Opcional..." />
-        </label>
-
-        <FormActions>
-          <Button type="submit" variant="secondary" disabled={isSubmitting}>
-            Confirmar
-            <CheckCircle />
-          </Button>
-          <Button type="submit">Cancelar</Button>
-        </FormActions>
-      </FormEdit>
-    </Content>
+                  <Dialog.Close asChild>
+                    <Button type="submit">Fechar</Button>
+                  </Dialog.Close>
+                </FormActions>
+              </Content>
+            </Container>
+          </Form>
+        </DialogContent>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }

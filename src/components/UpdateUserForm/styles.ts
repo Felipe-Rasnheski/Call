@@ -1,14 +1,28 @@
-import { Box, styled, Text, TextInput } from '@ignite-ui/react'
+import { styled, Text, TextInput } from '@ignite-ui/react'
 import * as Dialog from '@radix-ui/react-dialog'
 
-export const Content = styled('div', {
+export const Form = styled('form', {
+  label: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '$2',
+
+    [`> ${TextInput}`]: {
+      fontFamily: '$default',
+    },
+  },
+})
+
+export const Container = styled('div', {
   position: 'relative',
+  inset: 0,
   padding: '$4',
-  height: '100%',
+  backgroundColor: '$black',
+  borderRadius: '$sm',
+  height: '90vh',
+  minHeight: 'fit-content',
   overflowY: 'auto',
-  background: '$black',
-  boxShadow: 'none',
-  borderRadius: '8px',
+  overflowX: 'hidden',
 
   '&::-webkit-scrollbar': {
     width: '0.65rem',
@@ -29,21 +43,48 @@ export const Content = styled('div', {
   },
 })
 
-export const FormEdit = styled(Box, {
-  marginTop: '$6',
+export const Content = styled('div', {
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
+  height: 'fit-content',
+  padding: '$4',
+  background: '$gray700',
+  width: '40vw',
+  minWidth: 300,
+  borderRadius: '8px',
   gap: '$4',
 
-  label: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '$2',
-
-    [`> ${TextInput}`]: {
-      fontFamily: '$default',
-    },
+  textarea: {
+    width: '100%',
   },
+})
+
+export const DialogTrigger = styled(Dialog.Trigger, {
+  all: 'unset',
+  position: 'absolute',
+  right: 0,
+  bottom: 0,
+  padding: '$2 $4',
+
+  '&:hover': {
+    cursor: 'pointer',
+  },
+})
+
+export const DialogOverlay = styled(Dialog.Overlay, {
+  position: 'fixed',
+  inset: 0,
+  background: 'rgba(0, 0, 0, 0.75)',
+  zIndex: 2,
+})
+
+export const DialogContent = styled(Dialog.Content, {
+  position: 'absolute',
+  inset: 0,
+  zIndex: 3,
+  display: 'flex',
+  justifyContent: 'center',
 })
 
 export const FormError = styled(Text, {

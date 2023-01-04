@@ -1,12 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Text } from '@ignite-ui/react'
-import { randomBytes } from 'crypto'
-import { MagnifyingGlass } from 'phosphor-react'
-import { useState } from 'react'
+import Link from 'next/link'
+import { MagnifyingGlass, X } from 'phosphor-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { api } from '../../lib/axios'
-import { Container, Search, User } from './styles'
+import { Container, Search, SearchResults, User } from './styles'
 
 const searchUserSchema = z.object({
   query: z.string().min(1),
@@ -14,7 +14,7 @@ const searchUserSchema = z.object({
 
 type SearchUserData = z.infer<typeof searchUserSchema>
 
-type UserProps = { username: string }
+type UserProps = { id: string; username: string; avatar_url: string }
 
 export function SearchUser() {
   const [searchResult, setSearchResult] = useState<UserProps[]>([])
@@ -22,17 +22,32 @@ export function SearchUser() {
   const {
     handleSubmit,
     register,
+    setValue,
+    watch,
     formState: { isSubmitting },
   } = useForm<SearchUserData>({
     resolver: zodResolver(searchUserSchema),
   })
 
+  const query = watch('query')
+
+  useEffect(() => {
+    if (query === '' && searchResult.length !== 0) {
+      setSearchResult([])
+    }
+  }, [query, searchResult])
+
   async function handleSearchUser(data: SearchUserData) {
-    const user = await api
+    const users = await api
       .get(`/search/${data.query}`)
       .then((response) => response.data)
 
-    setSearchResult(user)
+    setSearchResult(users)
+  }
+
+  function handleClearSearch() {
+    setSearchResult([])
+    setValue('query', '')
   }
 
   return (
@@ -43,18 +58,29 @@ export function SearchUser() {
           placeholder="Encontre usuário"
           {...register('query')}
         />
-        <button type="submit" disabled={isSubmitting}>
-          <MagnifyingGlass size={20} weight="bold" />
-        </button>
+        {searchResult.length > 0 ? (
+          <span>
+            <X size={20} onClick={handleClearSearch} />
+          </span>
+        ) : (
+          <button type="submit" disabled={isSubmitting}>
+            <MagnifyingGlass size={20} weight="bold" />
+          </button>
+        )}
       </Search>
-      {searchResult.map((user) => {
-        const key = randomBytes(20).toString('hex')
-        return (
-          <User key={key}>
-            <Text>{user.username}</Text>
-          </User>
-        )
-      })}
+      {searchResult.length > 0 && (
+        <SearchResults>
+          {searchResult.map((user) => {
+            return (
+              <Link href="/" key={user.id}>
+                <User>
+                  <Text>{user.username}</Text>
+                </User>
+              </Link>
+            )
+          })}
+        </SearchResults>
+      )}
     </Container>
   )
 }
