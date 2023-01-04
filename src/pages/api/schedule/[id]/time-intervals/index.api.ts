@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
-import { prisma } from '../../../../lib/prisma'
+import { prisma } from '../../../../../lib/prisma'
 
 const timeIntervalsBodySchema = z.object({
   intervals: z.array(
@@ -19,16 +19,6 @@ export default async function handler(
   if (req.method !== 'POST') {
     return res.status(405).end()
   }
-
-  // const session = await unstable_getServerSession(
-  //   req,
-  //   res,
-  //   buildNextAuthOptions(req, res),
-  // )
-
-  // if (!session) {
-  //   return res.status(401).end()
-  // }
 
   const { intervals } = timeIntervalsBodySchema.parse(req.body)
   const id = String(req.query.id)

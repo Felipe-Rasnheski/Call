@@ -84,10 +84,23 @@ export const Schedule = styled('div', {
   },
 })
 
-export const ScheduledTimes = styled('div', {
+export const AppointmentsBox = styled('div', {
   flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
   background: '$gray600',
   borderRadius: '$sm',
+
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingLeft: '$2',
+    alignItems: 'center',
+  },
+})
+
+export const AppointmentsContainer = styled('div', {
+  flex: 1,
 })
 
 export const Notice = styled('div', {
@@ -96,6 +109,7 @@ export const Notice = styled('div', {
   justifyContent: 'center',
   flexDirection: 'column',
   height: '100%',
+  width: '100%',
 
   svg: {
     color: '$gray100',
@@ -110,16 +124,10 @@ export const Notice = styled('div', {
   },
 })
 
-export const AppointmentsBox = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingLeft: '$2',
-    alignItems: 'center',
-  },
+export const Appointments = styled('div', {
+  flex: 1,
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
 })
 
 export const ButtonEdit = styled('div', {
@@ -150,11 +158,6 @@ export const ButtonEdit = styled('div', {
       backgroundColor: '$ignite300',
     },
   },
-})
-
-export const Appointments = styled('div', {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
 })
 
 export const Date = styled('div', {

@@ -21,7 +21,6 @@ export default async function handler(
       username,
     },
   })
-  console.log(username, user)
 
   if (!user) {
     return res.status(400).json({ message: 'User does not exist!' })
@@ -63,8 +62,6 @@ export default async function handler(
   `
 
   const blockedDates = blockedDateRaw.map((item) => item.date)
-
-  console.log(blockedDates)
 
   return res.json({ blockedWeekDays, blockedDates })
 }

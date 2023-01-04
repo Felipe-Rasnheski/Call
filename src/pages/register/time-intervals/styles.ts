@@ -1,41 +1,20 @@
-import { Box, styled } from '@ignite-ui/react'
+import { Heading, styled } from '@ignite-ui/react'
 
-export const IntervalBox = styled(Box, {
-  marginTop: '$6',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '$2',
+export const Container = styled('main', {
+  maxWidth: 572,
+  margin: '$6 auto $4',
+  padding: '0 $4',
 })
 
-export const IntervalsContainer = styled('div', {
-  border: '1px solid $gray600',
-  borderRadius: '$md',
-  marginBottom: '$2',
-})
+export const Header = styled('div', {
+  padding: '0 $6',
 
-export const IntervalItem = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  padding: '$3 $4',
-
-  '& + &': {
-    borderTop: '1px solid $gray600',
+  [`> ${Heading}`]: {
+    lineHeight: '$base',
   },
-})
 
-export const IntervalDay = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '$3',
-})
-
-export const IntervalInputs = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '$2',
-
-  'input::-webkit-calendar-picker-indicator': {
-    filter: 'invert(100%) brightness(90%)',
+  [`> ${Text}`]: {
+    color: '$gray200',
+    marginBottom: '$6',
   },
 })

@@ -72,7 +72,7 @@ export function SearchUser() {
         <SearchResults>
           {searchResult.map((user) => {
             return (
-              <Link href="/" key={user.id}>
+              <Link href={`/schedule/${user.username}`} key={user.id}>
                 <User>
                   <Text>{user.username}</Text>
                 </User>

@@ -3,14 +3,16 @@ import * as Avatar from '@radix-ui/react-avatar'
 
 import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { ArrowsClockwise, CalendarPlus, Trash, User } from 'phosphor-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SearchUser } from '../../../components/SearchUser'
 import { UpdateUserForm } from '../../../components/UpdateUserForm'
 import { api } from '../../../lib/axios'
 import {
   Appointments,
   AppointmentsBox,
+  AppointmentsContainer,
   ButtonEdit,
   ConfirmDelete,
   Container,
@@ -19,7 +21,6 @@ import {
   Notice,
   ProfileInfo,
   Schedule,
-  ScheduledTimes,
   // eslint-disable-next-line prettier/prettier
   UserAvatar
 } from './styles'
@@ -35,7 +36,7 @@ interface UserProps {
   bio: string | null
 }
 
-interface Scheduled {
+interface Schedules {
   id: string
   name: string
   date: Date
@@ -44,14 +45,24 @@ interface Scheduled {
   created_at: Date
 }
 
+interface SchedulesToShow {
+  type: string
+  schedules: Schedules[]
+}
+
 export default function Profile() {
   const [user, setUser] = useState<UserProps>()
-  const [scheduled, setScheduled] = useState<Scheduled[]>([])
-  const [scheduledWith, setScheduledWith] = useState<Scheduled[]>([])
+  const [schedulesToShow, setSchedulesToShow] = useState<SchedulesToShow>({
+    type: '',
+    schedules: [],
+  })
   const [askConfirmDelete, setAskConfirmDelete] = useState('')
 
   const session = useSession()
   const userId = session.data?.user.id
+
+  const scheduled = useRef<Schedules[]>([])
+  const scheduledWith = useRef<Schedules[]>([])
 
   useEffect(() => {
     if (!userId) return
@@ -63,11 +74,11 @@ export default function Profile() {
     }
 
     async function getScheduled() {
-      const scheduled = await api
+      const scheduledResponse: Schedules[] = await api
         .get(`schedule/${userId}`)
         .then((res) => res.data)
 
-      scheduled.sort((a: Scheduled, b: Scheduled) => {
+      scheduledResponse.sort((a: Schedules, b: Schedules) => {
         const dateA = dayjs(a.date).unix()
         const dateB = dayjs(b.date).unix()
 
@@ -77,15 +88,19 @@ export default function Profile() {
         return 0
       })
 
-      setScheduled(scheduled)
+      scheduled.current = scheduledResponse
+
+      if (scheduledResponse.length > 0) {
+        setSchedulesToShow({ type: 'scheduled', schedules: scheduledResponse })
+      }
     }
 
     async function getScheduledWith() {
-      const scheduledWith = await api
+      const scheduledWithResponse = await api
         .get(`/schedule/${userId}/scheduled-with`)
         .then((res) => res.data)
 
-      scheduledWith.sort((a: Scheduled, b: Scheduled) => {
+      scheduledWithResponse.sort((a: Schedules, b: Schedules) => {
         const dateA = dayjs(a.date).unix()
         const dateB = dayjs(b.date).unix()
 
@@ -95,7 +110,14 @@ export default function Profile() {
         return 0
       })
 
-      setScheduledWith(scheduledWith)
+      scheduledWith.current = scheduledWithResponse
+
+      if (scheduled.current.length === 0 && scheduledWithResponse > 0) {
+        setSchedulesToShow({
+          type: 'scheduledWith',
+          schedules: scheduledWithResponse,
+        })
+      }
     }
 
     getUser()
@@ -103,14 +125,37 @@ export default function Profile() {
     getScheduledWith()
   }, [userId])
 
-  async function handleDeleteSchedule(id: string) {
+  async function handleDeleteSchedule(id: string, type: string) {
     await api.delete(`/schedule/${id}/delete`)
 
-    const scheduledWithoutDeleted = scheduled.filter(
+    const scheduledWithoutDeleted = schedulesToShow.schedules.filter(
       (schedule) => schedule.id !== id,
     )
 
-    setScheduled(scheduledWithoutDeleted)
+    setSchedulesToShow({
+      type,
+      schedules: scheduledWithoutDeleted,
+    })
+  }
+
+  function handleChangeSchedulesToShow() {
+    if (schedulesToShow.type === 'scheduled') {
+      setSchedulesToShow({
+        type: 'scheduledWith',
+        schedules: scheduledWith.current,
+      })
+    } else {
+      setSchedulesToShow({
+        type: 'scheduled',
+        schedules: scheduled.current,
+      })
+    }
+  }
+
+  const router = useRouter()
+
+  function handleEditTimeIntervals() {
+    router.push(`/profile/${user?.username}/edit-time-intervals`)
   }
 
   return (
@@ -136,25 +181,29 @@ export default function Profile() {
           <h1>Horários Agendados</h1>
           <SearchUser />
         </header>
-        <ScheduledTimes>
-          {scheduled.length === 0 ? (
-            <Notice>
-              <CalendarPlus size={52} />
-              <h2>Você ainda não tem nenhum horário agendado</h2>
-            </Notice>
-          ) : (
-            <AppointmentsBox>
-              <header>
-                <h2>Marcaram com você</h2>
-                <ButtonEdit>
-                  <button>
-                    <ArrowsClockwise size={18} />
-                  </button>
-                  <button>Editar horários</button>
-                </ButtonEdit>
-              </header>
+        <AppointmentsBox>
+          <header>
+            {schedulesToShow.type === 'scheduled' ? (
+              <h2>Marcaram com você</h2>
+            ) : (
+              <h2>Você marcou com</h2>
+            )}
+            <ButtonEdit>
+              <button onClick={handleChangeSchedulesToShow}>
+                <ArrowsClockwise size={18} />
+              </button>
+              <button onClick={handleEditTimeIntervals}>Editar horários</button>
+            </ButtonEdit>
+          </header>
+          <AppointmentsContainer>
+            {schedulesToShow.schedules.length === 0 ? (
+              <Notice>
+                <CalendarPlus size={52} />
+                <h2>Nenhum horário agendado</h2>
+              </Notice>
+            ) : (
               <Appointments>
-                {scheduled.map((appointment) => {
+                {schedulesToShow.schedules.map((appointment) => {
                   return (
                     <Date key={appointment.id}>
                       <div>
@@ -178,7 +227,12 @@ export default function Profile() {
                             Cancelar
                           </button>
                           <button
-                            onClick={() => handleDeleteSchedule(appointment.id)}
+                            onClick={() =>
+                              handleDeleteSchedule(
+                                appointment.id,
+                                schedulesToShow.type,
+                              )
+                            }
                           >
                             Deletar
                           </button>
@@ -188,9 +242,9 @@ export default function Profile() {
                   )
                 })}
               </Appointments>
-            </AppointmentsBox>
-          )}
-        </ScheduledTimes>
+            )}
+          </AppointmentsContainer>
+        </AppointmentsBox>
       </Schedule>
     </Container>
   )
