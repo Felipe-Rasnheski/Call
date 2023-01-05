@@ -59,7 +59,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
   const { data: blockedDates } = useQuery<BlockedDates>(
     ['blocked-dates', currentDate.get('year'), currentDate.get('month')],
     async () => {
-      const response = await api.get(`users/${username}/blocked-dates`, {
+      const response = await api.get(`schedule/blocked-dates/${username}`, {
         params: {
           year: currentDate.get('year'),
           month: currentDate.get('month') + 1,

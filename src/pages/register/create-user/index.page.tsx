@@ -19,8 +19,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { api } from '../../../lib/axios'
 import { buildNextAuthOptions } from '../../api/auth/[...nextauth].api'
-import { Container, FormError, Header } from '../styles'
-import { FormAnnotation, ProfileBox } from './styles'
+import {
+  Container,
+  FormAnnotation,
+  FormError,
+  Header,
+  // eslint-disable-next-line prettier/prettier
+  ProfileBox
+} from './styles'
 
 const createUserSchema = z
   .object({

@@ -6,6 +6,7 @@ export const Container = styled(Box, {
   display: 'grid',
   maxWidth: '100%',
   position: 'relative',
+  border: 'none',
 
   variants: {
     isTimePickerOpen: {
@@ -18,22 +19,38 @@ export const Container = styled(Box, {
       },
       false: {
         width: 540,
+        margin: '$4 auto',
         gridTemplateColumns: '1fr',
       },
     },
   },
+
+  '@media (max-width: 900px)': {
+    margin: '$6 $10',
+  },
+})
+
+export const PickerContainer = styled('div', {
+  position: 'relative',
 })
 
 export const TimerPicker = styled('div', {
   borderLeft: '1px solid $gray600',
   padding: '$6 $6 0',
   overflowY: 'auto',
-
   position: 'absolute',
   top: 0,
   bottom: 0,
   right: 0,
   width: 280,
+
+  '@media (max-width: 900px)': {
+    position: 'relative',
+    borderTop: '10px solid $black',
+    width: '100%',
+    border: '1px solid $gray600',
+    borderRadius: '8px',
+  },
 
   '&::-webkit-scrollbar': {
     width: '0.65rem',

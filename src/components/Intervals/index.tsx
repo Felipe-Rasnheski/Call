@@ -2,13 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Checkbox, Text, TextInput } from '@ignite-ui/react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { ArrowRight } from 'phosphor-react'
+import { ArrowRight, CheckCircle } from 'phosphor-react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { api } from '../../lib/axios'
 import { convertTimeStringToMinutes } from '../../utils/covert-time-in-string-in-minutes'
 import { getWeekDays } from '../../utils/get-Week-days'
 import {
+  Buttons,
   FormError,
   IntervalBox,
   IntervalDay,
@@ -59,9 +60,9 @@ const timeIntervalsFormSchema = z.object({
 type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
 type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
-type TimeIntervalsProps = { navigate: string }
+type TimeIntervalsProps = { navigate: string; varianty: 'first' | 'second' }
 
-export function Intervals({ navigate }: TimeIntervalsProps) {
+export function Intervals({ navigate, varianty }: TimeIntervalsProps) {
   const session = useSession()
 
   const user_id = session.data?.user.id
@@ -110,7 +111,7 @@ export function Intervals({ navigate }: TimeIntervalsProps) {
       }
     })
 
-    await api.post(`/schedule/${user_id}/time-intervals/update`, timeIntervals)
+    await api.post(`/schedule/${user_id}/time-intervals`, timeIntervals)
 
     await router.push(navigate)
   }
@@ -142,14 +143,14 @@ export function Intervals({ navigate }: TimeIntervalsProps) {
                 <TextInput
                   size="sm"
                   type="time"
-                  step={60}
+                  step={3600}
                   disabled={intervals[index].enabled === false}
                   {...register(`intervals.${index}.startTime`)}
                 />
                 <TextInput
                   size="sm"
                   type="time"
-                  step={60}
+                  step={3600}
                   disabled={intervals[index].enabled === false}
                   {...register(`intervals.${index}.endTime`)}
                 />
@@ -159,9 +160,27 @@ export function Intervals({ navigate }: TimeIntervalsProps) {
         })}
       </IntervalsContainer>
       {errors.intervals && <FormError>{errors.intervals.message}</FormError>}
-      <Button disabled={isSubmitting}>
-        Próximo passo <ArrowRight />
-      </Button>
+
+      {varianty === 'first' && (
+        <Button disabled={isSubmitting}>
+          Próximo passo <ArrowRight />
+        </Button>
+      )}
+
+      {varianty === 'second' && (
+        <Buttons>
+          <Button disabled={isSubmitting}>
+            Comfirme <CheckCircle size={18} />
+          </Button>
+          <Button
+            as="div"
+            variant="secondary"
+            onClick={() => router.push(navigate)}
+          >
+            Voltar
+          </Button>
+        </Buttons>
+      )}
     </IntervalBox>
   )
 }

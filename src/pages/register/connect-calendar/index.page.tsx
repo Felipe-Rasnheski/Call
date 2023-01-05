@@ -3,8 +3,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import { ArrowRight, Check } from 'phosphor-react'
-import { Container, Header } from '../styles'
-import { AuthError, ConnectBox, ConnectItem } from './styles'
+import { AuthError, ConnectBox, ConnectItem, Container, Header } from './styles'
 
 export default function ConnectCalendar() {
   const session = useSession()

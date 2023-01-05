@@ -8,7 +8,7 @@ export default function TimeIntervals() {
   const session = useSession()
   const username = session.data?.user.username
 
-  const navigate = `/profile/${username}/calendar`
+  const navigate = `/profile/${username}`
 
   return (
     <>
@@ -23,7 +23,7 @@ export default function TimeIntervals() {
           <MultiStep size={4} currentStep={3} />
         </Header>
 
-        <Intervals navigate={navigate} />
+        <Intervals navigate={navigate} varianty="first" />
       </Container>
     </>
   )

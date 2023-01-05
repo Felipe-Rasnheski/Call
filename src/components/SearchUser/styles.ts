@@ -10,6 +10,10 @@ export const Container = styled('div', {
   width: '40%',
   minWidth: 300,
   zIndex: 1,
+
+  '@media (max-width: 700px)': {
+    width: '100%',
+  },
 })
 
 export const Search = styled('form', {

@@ -13,7 +13,7 @@ export default async function handler(
 
   const schedule = await prisma.scheduling.findMany({
     where: {
-      id: user_id,
+      user_who_is_scheduling_id: user_id,
     },
   })
 

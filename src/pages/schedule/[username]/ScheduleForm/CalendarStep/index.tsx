@@ -6,6 +6,7 @@ import { Calendar } from '../../../../../components/Calendar'
 import { api } from '../../../../../lib/axios'
 import {
   Container,
+  PickerContainer,
   TimerPicker,
   TimerPickerHeader,
   TimerPickerItem,
@@ -42,7 +43,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   const { data: availability } = useQuery<Availability>(
     ['availability', selectedDateWithoutTime],
     async () => {
-      const response = await api.get(`users/${username}/availability`, {
+      const response = await api.get(`schedule/availability/${username}`, {
         params: {
           date: selectedDateWithoutTime,
         },
@@ -68,24 +69,26 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
     <Container isTimePickerOpen={isDateSelected}>
       <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
       {isDateSelected && (
-        <TimerPicker>
-          <TimerPickerHeader>
-            {weekDay} <span>{describedDate}</span>
-          </TimerPickerHeader>
-          <TimerPickerList>
-            {availability?.possibleTimes.map((hour) => {
-              return (
-                <TimerPickerItem
-                  key={hour}
-                  onClick={() => handleSelectTime(hour)}
-                  disabled={!availability.availableTimes.includes(hour)}
-                >
-                  {String(hour).padStart(2, '0')}:00h
-                </TimerPickerItem>
-              )
-            })}
-          </TimerPickerList>
-        </TimerPicker>
+        <PickerContainer>
+          <TimerPicker>
+            <TimerPickerHeader>
+              {weekDay} <span>{describedDate}</span>
+            </TimerPickerHeader>
+            <TimerPickerList>
+              {availability?.possibleTimes.map((hour) => {
+                return (
+                  <TimerPickerItem
+                    key={hour}
+                    onClick={() => handleSelectTime(hour)}
+                    disabled={!availability.availableTimes.includes(hour)}
+                  >
+                    {String(hour).padStart(2, '0')}:00h
+                  </TimerPickerItem>
+                )
+              })}
+            </TimerPickerList>
+          </TimerPicker>
+        </PickerContainer>
       )}
     </Container>
   )

@@ -1,8 +1,8 @@
 import { Text } from '@ignite-ui/react'
 import * as Avatar from '@radix-ui/react-avatar'
-
 import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import { ArrowsClockwise, CalendarPlus, Trash, User } from 'phosphor-react'
 import { useEffect, useRef, useState } from 'react'
@@ -41,8 +41,12 @@ interface Schedules {
   name: string
   date: Date
   email: string
+  username: string
   observations: string
   created_at: Date
+  user_who_is_scheduling_name?: string
+  user_who_is_scheduling_email?: string
+  user_who_is_scheduling_username?: string
 }
 
 interface SchedulesToShow {
@@ -88,15 +92,25 @@ export default function Profile() {
         return 0
       })
 
-      scheduled.current = scheduledResponse
+      scheduled.current = scheduledResponse.map((schedule) => {
+        return {
+          id: schedule.id,
+          date: schedule.date,
+          name: schedule.user_who_is_scheduling_name!,
+          email: schedule.user_who_is_scheduling_email!,
+          username: schedule.user_who_is_scheduling_username!,
+          observations: schedule.observations,
+          created_at: schedule.created_at,
+        }
+      })
 
       if (scheduledResponse.length > 0) {
-        setSchedulesToShow({ type: 'scheduled', schedules: scheduledResponse })
+        setSchedulesToShow({ type: 'scheduled', schedules: scheduled.current })
       }
     }
 
     async function getScheduledWith() {
-      const scheduledWithResponse = await api
+      const scheduledWithResponse: Schedules[] = await api
         .get(`/schedule/${userId}/scheduled-with`)
         .then((res) => res.data)
 
@@ -110,12 +124,22 @@ export default function Profile() {
         return 0
       })
 
-      scheduledWith.current = scheduledWithResponse
+      scheduledWith.current = scheduledWithResponse.map((schedule) => {
+        return {
+          id: schedule.id,
+          date: schedule.date,
+          name: schedule.name,
+          email: schedule.email,
+          username: schedule.username,
+          observations: schedule.observations,
+          created_at: schedule.created_at,
+        }
+      })
 
-      if (scheduled.current.length === 0 && scheduledWithResponse > 0) {
+      if (scheduled.current.length === 0 && scheduledWithResponse.length > 0) {
         setSchedulesToShow({
           type: 'scheduledWith',
-          schedules: scheduledWithResponse,
+          schedules: scheduledWith.current,
         })
       }
     }
@@ -131,6 +155,14 @@ export default function Profile() {
     const scheduledWithoutDeleted = schedulesToShow.schedules.filter(
       (schedule) => schedule.id !== id,
     )
+
+    if (type === 'scheduled') {
+      scheduled.current = scheduledWithoutDeleted
+    }
+
+    if (type === 'scheduledWith') {
+      scheduledWith.current = scheduledWithoutDeleted
+    }
 
     setSchedulesToShow({
       type,
@@ -159,93 +191,99 @@ export default function Profile() {
   }
 
   return (
-    <Container>
-      <ProfileInfo>
-        <UserAvatar>
-          <Avatar.Image src={user?.avatar_url} alt={user?.name} />
-          <Avatar.Fallback>
-            <User />
-          </Avatar.Fallback>
-        </UserAvatar>
+    <>
+      <NextSeo title={`${user?.username} | Call`} noindex />
+      <Container>
+        <ProfileInfo>
+          <UserAvatar>
+            <Avatar.Image src={user?.avatar_url} alt={user?.name} />
+            <Avatar.Fallback>
+              <User />
+            </Avatar.Fallback>
+          </UserAvatar>
 
-        <Description>
-          <p>{user?.name}</p>
-          <p title="Username">{user?.username}</p>
-          <p title="Biografia">{user?.bio}</p>
-        </Description>
+          <Description>
+            <p>{user?.name}</p>
+            <p title="Username">{user?.username}</p>
+            <p title="Biografia">{user?.bio}</p>
+          </Description>
 
-        {user && <UpdateUserForm user={user} setUser={setUser} />}
-      </ProfileInfo>
-      <Schedule>
-        <header>
-          <h1>Horários Agendados</h1>
-          <SearchUser />
-        </header>
-        <AppointmentsBox>
+          {user && <UpdateUserForm user={user} setUser={setUser} />}
+        </ProfileInfo>
+        <Schedule>
           <header>
-            {schedulesToShow.type === 'scheduled' ? (
-              <h2>Marcaram com você</h2>
-            ) : (
-              <h2>Você marcou com</h2>
-            )}
-            <ButtonEdit>
-              <button onClick={handleChangeSchedulesToShow}>
-                <ArrowsClockwise size={18} />
-              </button>
-              <button onClick={handleEditTimeIntervals}>Editar horários</button>
-            </ButtonEdit>
+            <h1>Horários Agendados</h1>
+            <SearchUser />
           </header>
-          <AppointmentsContainer>
-            {schedulesToShow.schedules.length === 0 ? (
-              <Notice>
-                <CalendarPlus size={52} />
-                <h2>Nenhum horário agendado</h2>
-              </Notice>
-            ) : (
-              <Appointments>
-                {schedulesToShow.schedules.map((appointment) => {
-                  return (
-                    <Date key={appointment.id}>
-                      <div>
-                        <Text>{appointment.name}</Text>
-                        <Text>
-                          {dayjs(appointment.date).format(
-                            'DD[ ]MMMM[ ]YYYY[, ]dddd',
-                          )}
-                        </Text>
-                        <Text>{appointment.email}</Text>
-                        <Text>{appointment.observations}</Text>
-                      </div>
-                      <button
-                        onClick={() => setAskConfirmDelete(appointment.id)}
-                      >
-                        <Trash weight="bold" />
-                      </button>
-                      {askConfirmDelete === appointment.id && (
-                        <ConfirmDelete>
-                          <button onClick={() => setAskConfirmDelete('')}>
-                            Cancelar
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleDeleteSchedule(
-                                appointment.id,
-                                schedulesToShow.type,
-                              )
-                            }
-                          >
-                            Deletar
-                          </button>
-                        </ConfirmDelete>
-                      )}
-                    </Date>
-                  )
-                })}
-              </Appointments>
-            )}
-          </AppointmentsContainer>
-        </AppointmentsBox>
-      </Schedule>
-    </Container>
+          <AppointmentsBox>
+            <header>
+              {schedulesToShow.type === 'scheduled' ? (
+                <h2>Marcaram com você</h2>
+              ) : (
+                <h2>Você marcou com</h2>
+              )}
+              <ButtonEdit>
+                <button onClick={handleChangeSchedulesToShow}>
+                  <ArrowsClockwise size={18} />
+                </button>
+                <button onClick={handleEditTimeIntervals}>
+                  Editar horários
+                </button>
+              </ButtonEdit>
+            </header>
+            <AppointmentsContainer>
+              {schedulesToShow.schedules.length === 0 ? (
+                <Notice>
+                  <CalendarPlus size={52} />
+                  <h2>Nenhum horário agendado</h2>
+                </Notice>
+              ) : (
+                <Appointments>
+                  {schedulesToShow.schedules.map((appointment) => {
+                    return (
+                      <Date key={appointment.id}>
+                        <div>
+                          <Text>{appointment.name}</Text>
+                          <Text>{appointment.username}</Text>
+                          <Text>
+                            {dayjs(appointment.date).format(
+                              'DD[ ]MMMM[ ]YYYY[, ]dddd',
+                            )}
+                          </Text>
+                          <Text>{appointment.email}</Text>
+                          <Text>Obs: {appointment.observations}</Text>
+                        </div>
+                        <button
+                          onClick={() => setAskConfirmDelete(appointment.id)}
+                        >
+                          <Trash weight="bold" />
+                        </button>
+                        {askConfirmDelete === appointment.id && (
+                          <ConfirmDelete>
+                            <button onClick={() => setAskConfirmDelete('')}>
+                              Cancelar
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDeleteSchedule(
+                                  appointment.id,
+                                  schedulesToShow.type,
+                                )
+                              }
+                            >
+                              Deletar
+                            </button>
+                          </ConfirmDelete>
+                        )}
+                      </Date>
+                    )
+                  })}
+                </Appointments>
+              )}
+            </AppointmentsContainer>
+          </AppointmentsBox>
+        </Schedule>
+      </Container>
+    </>
   )
 }

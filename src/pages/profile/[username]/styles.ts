@@ -6,6 +6,11 @@ export const Container = styled(Box, {
   padding: '$4',
   display: 'flex',
   gap: '$4',
+
+  '@media (max-width: 1000px)': {
+    flexDirection: 'column',
+    fontSize: '$sm',
+  },
 })
 
 export const ProfileInfo = styled('div', {
@@ -17,6 +22,13 @@ export const ProfileInfo = styled('div', {
   height: 'fit-content',
   border: '1px solid $gray400',
   textAlign: 'center',
+
+  '@media (max-width: 1000px)': {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    gap: '1rem',
+  },
 })
 
 export const UserAvatar = styled(Avatar.Root, {
@@ -110,6 +122,7 @@ export const Notice = styled('div', {
   flexDirection: 'column',
   height: '100%',
   width: '100%',
+  padding: '$10',
 
   svg: {
     color: '$gray100',
@@ -128,16 +141,25 @@ export const Appointments = styled('div', {
   flex: 1,
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
+
+  '@media (max-width: 800px)': {
+    gridTemplateColumns: 'repeat(2, 1fr)',
+  },
+
+  '@media (max-width: 600px)': {
+    gridTemplateColumns: '1fr',
+  },
 })
 
 export const ButtonEdit = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: 35,
   overflow: 'hidden',
+  fontSize: '$md',
 
   button: {
+    minHeight: 35,
     all: 'unset',
     top: 0,
     right: 0,

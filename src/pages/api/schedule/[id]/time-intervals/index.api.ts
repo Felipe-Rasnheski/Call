@@ -2,15 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
 import { prisma } from '../../../../../lib/prisma'
 
-const timeIntervalsBodySchema = z.object({
-  intervals: z.array(
-    z.object({
-      weekDay: z.number(),
-      startTimeInMinutes: z.number(),
-      endTimeInMinutes: z.number(),
-    }),
-  ),
-})
+const timeIntervalsBodySchema = z.array(
+  z.object({
+    user_id: z.string(),
+    week_day: z.number(),
+    time_start_in_minutes: z.number(),
+    time_end_in_minutes: z.number(),
+  }),
+)
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,21 +19,17 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { intervals } = timeIntervalsBodySchema.parse(req.body)
-  const id = String(req.query.id)
+  const user_id = String(req.query.id)
 
-  await Promise.all(
-    intervals.map((interval) => {
-      return prisma.userTimeInterval.create({
-        data: {
-          week_day: interval.weekDay,
-          time_start_in_minutes: interval.startTimeInMinutes,
-          time_end_in_minutes: interval.endTimeInMinutes,
-          user_id: id,
-        },
-      })
-    }),
-  )
+  await prisma.$queryRaw`
+    DELETE FROM user_time_intervals WHERE user_id = ${user_id}
+  `
+  const intervals = timeIntervalsBodySchema.parse(req.body)
 
-  return res.status(201).end()
+  await prisma.userTimeInterval.createMany({
+    data: intervals,
+    skipDuplicates: true,
+  })
+
+  return res.status(200).end()
 }

@@ -13,7 +13,7 @@ export default function EditTimeIntervals() {
     <>
       <NextSeo title="Selecione sua disponibilidade | Call" noindex />
       <Container>
-        <Intervals navigate={navigate} />
+        <Intervals navigate={navigate} varianty="second" />
       </Container>
     </>
   )

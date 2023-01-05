@@ -12,6 +12,10 @@ export const ConfirmForm = styled(Box, {
     flexDirection: 'column',
     gap: '$2',
   },
+
+  '@media (max-width: 600px)': {
+    margin: '$6 $4 auto',
+  },
 })
 
 export const FormHeader = styled('div', {

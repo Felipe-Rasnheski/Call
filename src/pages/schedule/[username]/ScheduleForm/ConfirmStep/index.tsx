@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
 import dayjs from 'dayjs'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { CalendarBlank, Clock } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
@@ -11,7 +12,10 @@ import { ConfirmForm, FormActions, FormError, FormHeader } from './styles'
 const confirmationFormSchema = z.object({
   name: z.string().min(3, { message: 'O nome presisa no minimo 3 caracteres' }),
   email: z.string().email({ message: 'digite um e-mail válido' }),
-  observations: z.string().nullable(),
+  observations: z
+    .string()
+    .max(30, { message: 'Máximo de 30 caracteres' })
+    .nullable(),
 })
 
 type ConfirmationFormSchema = z.infer<typeof confirmationFormSchema>
@@ -37,12 +41,24 @@ export function ConfirmStep({
 
   const username = String(router.query.username)
 
+  const session = useSession()
+
+  const user_who_is_scheduling_id = session.data?.user.id
+    ? session.data.user.id
+    : null
+
+  const user_who_is_scheduling_username = session.data?.user.username
+    ? session.data.user.username
+    : null
+
   async function handleConfirmScheduling(data: ConfirmationFormSchema) {
     const { name, email, observations } = data
 
-    await api.post(`schedule/${username}/create-schedule`, {
-      name,
-      email,
+    await api.post(`schedule/create/${username}`, {
+      user_who_is_scheduling_id,
+      user_who_is_scheduling_name: name,
+      user_who_is_scheduling_username,
+      user_who_is_scheduling_email: email,
       observations,
       date: schedulingDate,
     })
@@ -85,10 +101,17 @@ export function ConfirmStep({
       <label>
         <Text size="sm">Observações</Text>
         <TextArea {...register('observations')} />
+        {errors.observations && (
+          <FormError>{errors.observations.message}</FormError>
+        )}
       </label>
 
       <FormActions>
-        <Button type="button" variant="tertiary" onClick={onCancelComfirmation}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={onCancelComfirmation}
+        >
           Cancelar
         </Button>
         <Button type="submit" disabled={isSubmitting}>

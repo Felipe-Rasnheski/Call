@@ -43,3 +43,12 @@ export const IntervalInputs = styled('div', {
 export const FormError = styled(Text, {
   color: '#F75a68',
 })
+
+export const Buttons = styled('div', {
+  display: 'flex',
+  gap: '$4',
+
+  button: {
+    flex: 1,
+  },
+})

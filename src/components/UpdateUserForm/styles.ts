@@ -70,6 +70,11 @@ export const DialogTrigger = styled(Dialog.Trigger, {
   '&:hover': {
     cursor: 'pointer',
   },
+
+  '@media (max-width: 1000px)': {
+    top: 5,
+    bottom: 'unset',
+  },
 })
 
 export const DialogOverlay = styled(Dialog.Overlay, {
