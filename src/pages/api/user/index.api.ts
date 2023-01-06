@@ -40,7 +40,6 @@ export default async function handler(
     data: {
       username,
       name: '',
-      senha: '',
     },
   })
 

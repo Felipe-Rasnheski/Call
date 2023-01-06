@@ -8,7 +8,7 @@ export const Container = styled('div', {
   borderRadius: '4px',
   overflow: 'hidden',
   width: '40%',
-  minWidth: 300,
+  minWidth: 270,
   zIndex: 1,
 
   '@media (max-width: 700px)': {

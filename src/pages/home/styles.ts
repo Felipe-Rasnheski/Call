@@ -4,18 +4,31 @@ export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$10',
+  minWidth: 'fit-content',
+  margin: '0 auto',
 })
 
 export const Header = styled('header', {
-  display: 'flex',
-  padding: '$4 $10',
   background: '$black',
   borderBottom: '1px solid $gray500',
+})
+
+export const HeaderContent = styled('div', {
+  maxWidth: 1440,
+  display: 'flex',
+  padding: '$4 $10',
   justifyContent: 'space-between',
+  margin: '0 auto',
 
   img: {
     height: '$10',
     width: '$10',
+  },
+
+  '@media (min-width: 1430px)': {
+    img: {
+      marginLeft: '$10',
+    },
   },
 })
 

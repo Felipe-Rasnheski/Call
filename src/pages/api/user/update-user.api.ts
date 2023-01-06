@@ -6,7 +6,6 @@ const updateProfileBodySchema = z.object({
   id: z.string(),
   name: z.string(),
   username: z.string(),
-  senha: z.string(),
   email: z.string().email(),
   bio: z.string(),
 })
@@ -19,8 +18,9 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { id, name, username, senha, email, bio } =
-    updateProfileBodySchema.parse(req.body)
+  const { id, name, username, email, bio } = updateProfileBodySchema.parse(
+    req.body,
+  )
 
   await prisma.user.update({
     where: {
@@ -29,7 +29,6 @@ export default async function handler(
     data: {
       name,
       username,
-      senha,
       email,
       bio,
     },

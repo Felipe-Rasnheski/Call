@@ -36,7 +36,6 @@ export function PrismaAdapter(
             name: user.name,
             username: '',
             email: user.email,
-            senha: '',
             avatar_url: user.avatar_url,
           },
         })

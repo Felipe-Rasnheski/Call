@@ -4,7 +4,14 @@ import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
-import { ArrowsClockwise, CalendarPlus, Trash, User } from 'phosphor-react'
+import {
+  ArrowsClockwise,
+  CalendarPlus,
+  PencilLine,
+  Trash,
+  // eslint-disable-next-line prettier/prettier
+  User
+} from 'phosphor-react'
 import { useEffect, useRef, useState } from 'react'
 import { SearchUser } from '../../../components/SearchUser'
 import { UpdateUserForm } from '../../../components/UpdateUserForm'
@@ -21,6 +28,7 @@ import {
   Notice,
   ProfileInfo,
   Schedule,
+  Toggle,
   // eslint-disable-next-line prettier/prettier
   UserAvatar
 } from './styles'
@@ -30,7 +38,6 @@ interface UserProps {
   name: string
   username: string
   email: string
-  senha: string
   created_at: Date
   avatar_url: string
   bio: string | null
@@ -61,6 +68,7 @@ export default function Profile() {
     schedules: [],
   })
   const [askConfirmDelete, setAskConfirmDelete] = useState('')
+  const [updateUserToggle, setUpdateUserToggle] = useState(false)
 
   const session = useSession()
   const userId = session.data?.user.id
@@ -193,6 +201,18 @@ export default function Profile() {
     router.push(`/profile/${user?.username}/edit-time-intervals`)
   }
 
+  if (updateUserToggle) {
+    return (
+      user && (
+        <UpdateUserForm
+          user={user}
+          setUser={setUser}
+          toggleOpen={setUpdateUserToggle}
+        />
+      )
+    )
+  }
+
   return (
     <>
       <NextSeo title={`${user?.username} | Call`} noindex />
@@ -211,7 +231,12 @@ export default function Profile() {
             <p title="Biografia">{user?.bio}</p>
           </Description>
 
-          {user && <UpdateUserForm user={user} setUser={setUser} />}
+          {user && (
+            // <UpdateUserForm user={user} setUser={setUser} />
+            <Toggle onClick={() => setUpdateUserToggle(true)}>
+              <PencilLine />
+            </Toggle>
+          )}
         </ProfileInfo>
         <Schedule>
           <header>
@@ -229,9 +254,14 @@ export default function Profile() {
                 <button onClick={handleChangeSchedulesToShow}>
                   <ArrowsClockwise size={18} />
                 </button>
-                <button onClick={handleEditTimeIntervals}>
-                  Editar horários
-                </button>
+                <span>
+                  <button onClick={handleEditTimeIntervals}>
+                    Editar horários
+                  </button>
+                </span>
+                <strong>
+                  <button onClick={handleEditTimeIntervals}>Edit</button>
+                </strong>
               </ButtonEdit>
             </header>
             <AppointmentsContainer>

@@ -1,7 +1,32 @@
-import { styled, Text, TextInput } from '@ignite-ui/react'
-import * as Dialog from '@radix-ui/react-dialog'
+import { Box, styled, Text, TextInput } from '@ignite-ui/react'
+
+export const Container = styled(Box, {
+  margin: '$8 auto',
+  padding: '$4',
+  width: '70%',
+  maxWidth: 500,
+
+  '@media (max-width: 500px)': {
+    fontSize: '$sm',
+  },
+})
 
 export const Form = styled('form', {
+  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  height: 'fit-content',
+  padding: '$4',
+  background: '$gray700',
+  width: '100%',
+  minWidth: 300,
+  borderRadius: '8px',
+  gap: '$4',
+
+  textarea: {
+    width: '100%',
+  },
+
   label: {
     display: 'flex',
     flexDirection: 'column',
@@ -13,83 +38,23 @@ export const Form = styled('form', {
   },
 })
 
-export const Container = styled('div', {
-  position: 'relative',
-  inset: 0,
-  padding: '$4',
-  backgroundColor: '$black',
-  borderRadius: '$sm',
-  height: '90vh',
-  minHeight: 'fit-content',
-  overflowY: 'auto',
-  overflowX: 'hidden',
-
-  '&::-webkit-scrollbar': {
-    width: '0.65rem',
-  },
-
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: '$gray700',
-    borderRadius: '2px',
-  },
-
-  '&::-webkit-scrollbar-thumb': {
-    background: '$gray500',
-    borderRadius: '2px',
-  },
-
-  '&::-webkit-scrollbar-thumb:hover': {
-    boxShadow: 'inset 0 0 2px $colors$gray800',
-  },
-})
-
-export const Content = styled('div', {
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  height: 'fit-content',
-  padding: '$4',
-  background: '$gray700',
-  width: '40vw',
-  minWidth: 300,
-  borderRadius: '8px',
-  gap: '$4',
-
-  textarea: {
-    width: '100%',
-  },
-})
-
-export const DialogTrigger = styled(Dialog.Trigger, {
+export const ButtonClose = styled('button', {
   all: 'unset',
   position: 'absolute',
+  top: 0,
   right: 0,
-  bottom: 0,
-  padding: '$2 $4',
+  margin: '$2',
+  padding: '$1',
+  border: '1px solid $gray400',
+  color: '$gray400',
+  borderRadius: '$full',
+  fontSize: 0,
 
   '&:hover': {
     cursor: 'pointer',
+    borderColor: '$gray100',
+    color: '$gray100',
   },
-
-  '@media (max-width: 1000px)': {
-    top: 5,
-    bottom: 'unset',
-  },
-})
-
-export const DialogOverlay = styled(Dialog.Overlay, {
-  position: 'fixed',
-  inset: 0,
-  background: 'rgba(0, 0, 0, 0.75)',
-  zIndex: 2,
-})
-
-export const DialogContent = styled(Dialog.Content, {
-  position: 'absolute',
-  inset: 0,
-  zIndex: 3,
-  display: 'flex',
-  justifyContent: 'center',
 })
 
 export const FormError = styled(Text, {
@@ -100,53 +65,4 @@ export const FormActions = styled(Text, {
   display: 'flex',
   flexDirection: 'row-reverse',
   gap: '$2',
-})
-
-export const DialogClose = styled(Dialog.Close, {
-  all: 'unset',
-  position: 'absolute',
-  right: '1rem',
-  top: '0.65rem',
-  background: 'transparent',
-  color: '#f8f9faff',
-  borderRadius: '50%',
-  lineHeight: 0,
-  padding: '0.25rem',
-  backgroundColor: '#121318ff',
-  border: '2px solid $gray700',
-
-  '&:hover': {
-    border: '2px solid $gray400',
-    cursor: 'pointer',
-    backgroundColor: '#121318ff',
-  },
-})
-
-export const Senha = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  background: '$gray900',
-  borderRadius: '6px',
-  padding: '0.5rem 1.1rem',
-
-  input: {
-    all: 'unset',
-    flex: 1,
-    fontFamily: '$default',
-  },
-
-  svg: {
-    padding: '0.25rem',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-
-  button: {
-    all: 'unset',
-  },
-
-  '&:hover': {
-    cursor: 'text',
-  },
 })

@@ -29,6 +29,15 @@ export const ProfileInfo = styled('div', {
     display: 'flex',
     gap: '1rem',
   },
+
+  '@media (max-width: 500px)': {
+    alignItems: 'center',
+  },
+
+  '@media (max-width: 460px)': {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 })
 
 export const UserAvatar = styled(Avatar.Root, {
@@ -47,6 +56,12 @@ export const UserAvatar = styled(Avatar.Root, {
   svg: {
     width: '100%',
     height: '100%',
+  },
+
+  '@media (max-width: 500px)': {
+    width: 100,
+    height: 100,
+    borderRadius: '$full',
   },
 })
 
@@ -76,6 +91,23 @@ export const Description = styled('div', {
 
   '&:hover': {
     cursor: 'default',
+  },
+})
+
+export const Toggle = styled('div', {
+  all: 'unset',
+  position: 'absolute',
+  right: 0,
+  bottom: 0,
+  padding: '$2 $4',
+
+  '&:hover': {
+    cursor: 'pointer',
+  },
+
+  '@media (max-width: 1000px)': {
+    top: 5,
+    bottom: 'unset',
   },
 })
 
@@ -152,32 +184,58 @@ export const Appointments = styled('div', {
 })
 
 export const ButtonEdit = styled('div', {
+  fontSize: '$md',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   overflow: 'hidden',
-  fontSize: '$md',
 
-  button: {
-    minHeight: 35,
+  strong: {
+    display: 'none',
+  },
+
+  'span, strong': {
+    button: {
+      minHeight: 35,
+      all: 'unset',
+      top: 0,
+      right: 0,
+      padding: '$2',
+      fontFamily: 'Roboto, sans-serif',
+      background: '$ignite500',
+      borderTopRightRadius: '$sm',
+      color: '$white',
+
+      '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: '$ignite300',
+      },
+    },
+  },
+
+  '> button': {
+    maxHeight: 35,
     all: 'unset',
     top: 0,
-    right: 0,
     padding: '$2',
-    fontFamily: 'Roboto, sans-serif',
-    background: '$ignite500',
-    borderTopRightRadius: '$sm',
     color: '$white',
-
-    '&:first-child': {
-      background: '#F75a68',
-      borderRadius: 0,
-      lineHeight: 0,
-    },
+    background: '#F75a68',
+    borderRadius: 0,
+    lineHeight: 0,
 
     '&:hover': {
       cursor: 'pointer',
       backgroundColor: '$ignite300',
+    },
+  },
+
+  '@media (max-width: 460px)': {
+    span: {
+      display: 'none',
+    },
+
+    strong: {
+      display: 'inline-block',
     },
   },
 })

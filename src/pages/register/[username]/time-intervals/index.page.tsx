@@ -2,7 +2,7 @@ import { Heading, MultiStep, Text } from '@ignite-ui/react'
 import { useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
-import { Intervals } from '../../../components/Intervals'
+import { Intervals } from '../../../../components/Intervals'
 import { Container, Header } from './styles'
 
 export default function TimeIntervals() {
@@ -26,7 +26,7 @@ export default function TimeIntervals() {
             Defina o intervalo de horários que você está disponivel em cada dia
             da semana
           </Text>
-          <MultiStep size={4} currentStep={3} />
+          <MultiStep size={3} currentStep={3} />
         </Header>
 
         <Intervals navigate={navigate} varianty="first" />

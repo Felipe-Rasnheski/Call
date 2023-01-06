@@ -28,28 +28,19 @@ import {
   ProfileBox
 } from './styles'
 
-const createUserSchema = z
-  .object({
-    username: z
-      .string()
-      .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
-      .regex(/^([a-z\\-]+)$/i, {
-        message: 'O usuário pode ter apenas letras e hifens.',
-      }),
-    name: z
-      .string()
-      .min(3, { message: 'O nome precisa ter pelo menos 3 letras.' }),
-    email: z.string().email(),
-    senha: z
-      .string()
-      .min(8, { message: 'A senha precisa ter pelo menos 8 caracteres.' }),
-    confirmeSenha: z.string(),
-    bio: z.string().nullable(),
-  })
-  .refine((obj) => obj.senha === obj.confirmeSenha, {
-    message: 'As senhas não são iguais!',
-    path: ['confirmeSenha'],
-  })
+const createUserSchema = z.object({
+  username: z
+    .string()
+    .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
+    .regex(/^([a-z\\-]+)$/i, {
+      message: 'O usuário pode ter apenas letras e hifens.',
+    }),
+  name: z
+    .string()
+    .min(3, { message: 'O nome precisa ter pelo menos 3 letras.' }),
+  email: z.string().email(),
+  bio: z.string().nullable(),
+})
 
 type CreateUserFormData = z.infer<typeof createUserSchema>
 
@@ -89,7 +80,6 @@ export default function CreateUser() {
         name: data.name,
         username,
         email: data.email,
-        senha: data.senha,
         bio: data.bio,
       })
 
@@ -111,7 +101,7 @@ export default function CreateUser() {
             Precisamos de algumas informações para criar seu perfil! Ah, você
             pode editar essas informações depois.
           </Text>
-          <MultiStep size={4} currentStep={2} />
+          <MultiStep size={3} currentStep={2} />
         </Header>
 
         <ProfileBox as="form" onSubmit={handleSubmit(handleCreateUser)}>
@@ -140,22 +130,6 @@ export default function CreateUser() {
             <TextInput type="email" {...register('email')} />
             {errors.email && (
               <FormError size="sm">{errors.email.message}</FormError>
-            )}
-          </label>
-
-          <label>
-            <Text size="sm">Senha</Text>
-            <TextInput type="password" {...register('senha')} />
-            {errors.senha && (
-              <FormError size="sm">{errors.senha.message}</FormError>
-            )}
-          </label>
-
-          <label>
-            <Text size="sm">Confirme Senha</Text>
-            <TextInput type="password" {...register('confirmeSenha')} />
-            {errors.confirmeSenha && (
-              <FormError size="sm">{errors.confirmeSenha.message}</FormError>
             )}
           </label>
 
