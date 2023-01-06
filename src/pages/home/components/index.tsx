@@ -13,8 +13,8 @@ const claimUserNameFormSchema = z.object({
     .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
     .regex(/^([a-z\\-]+)$/i, {
       message: 'O usuário pode ter apenas letras e hifens.',
-    })
-    .transform((userName) => userName.toLowerCase()),
+    }),
+  // .transform((userName) => userName.toLowerCase()),
 })
 
 type ClaimUserNameFormSchema = z.infer<typeof claimUserNameFormSchema>
@@ -33,9 +33,13 @@ export function ClaimUserNameForm() {
   async function handleClaimUserName(data: ClaimUserNameFormSchema) {
     const { username } = data
 
-    await api.post('/user', {
-      username,
-    })
+    try {
+      await api.post('/user', {
+        username,
+      })
+    } catch (err) {
+      console.error(err)
+    }
 
     await router.push('/register/connect-calendar')
   }

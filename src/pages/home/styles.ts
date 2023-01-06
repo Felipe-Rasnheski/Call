@@ -43,6 +43,8 @@ export const Main = styled('main', {
   alignItems: 'center',
   paddingLeft: '$10',
   overflow: 'hidden',
+  maxWidth: 1360,
+  margin: '0 auto',
 
   '@media(max-width: 600px)': {
     paddingRight: '$10',

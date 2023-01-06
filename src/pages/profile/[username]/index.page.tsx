@@ -50,7 +50,7 @@ interface Schedules {
 }
 
 interface SchedulesToShow {
-  type: string
+  type: 'scheduled' | 'scheduledWith' | ''
   schedules: Schedules[]
 }
 
@@ -149,7 +149,10 @@ export default function Profile() {
     getScheduledWith()
   }, [userId])
 
-  async function handleDeleteSchedule(id: string, type: string) {
+  async function handleDeleteSchedule(
+    id: string,
+    type: 'scheduled' | 'scheduledWith' | '',
+  ) {
     await api.delete(`/schedule/${id}/delete`)
 
     const scheduledWithoutDeleted = schedulesToShow.schedules.filter(

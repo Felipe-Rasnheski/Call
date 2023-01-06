@@ -35,8 +35,7 @@ const createUserSchema = z
       .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
       .regex(/^([a-z\\-]+)$/i, {
         message: 'O usuário pode ter apenas letras e hifens.',
-      })
-      .transform((username) => username.toLocaleLowerCase()),
+      }),
     name: z
       .string()
       .min(3, { message: 'O nome precisa ter pelo menos 3 letras.' }),
@@ -83,17 +82,18 @@ export default function CreateUser() {
   const router = useRouter()
 
   async function handleCreateUser(data: CreateUserFormData) {
+    const username = data.username
     try {
       await api.put('/user/update-user', {
         id: user.id,
         name: data.name,
-        username: data.username,
+        username,
         email: data.email,
         senha: data.senha,
         bio: data.bio,
       })
 
-      await router.push('/register/time-intervals')
+      await router.push(`/register/${username}/time-intervals`)
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data.message) {
         alert(error.response.data.message)

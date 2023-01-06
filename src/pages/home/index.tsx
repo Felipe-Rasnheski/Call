@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Call from '../../../public/call.svg'
 import AppPreviewIMG from '../../assets/app-preview.png'
+import { api } from '../../lib/axios'
 import { ClaimUserNameForm } from './components'
 import { Actions, Container, Header, Hero, Main, Preview } from './styles'
 
@@ -11,6 +12,9 @@ export default function Home() {
   const router = useRouter()
 
   async function handleRegistration() {
+    await api.post('/user', {
+      username: '',
+    })
     await router.push('/register/connect-calendar')
   }
 

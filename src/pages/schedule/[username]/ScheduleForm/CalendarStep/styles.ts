@@ -1,11 +1,20 @@
 import { Box, styled } from '@ignite-ui/react'
 
+export const CalendarContainer = styled('div', {
+  margin: '0 auto',
+  maxWidth: '100%',
+
+  '> button': {
+    margin: '0 auto',
+    fontWeight: 'bold',
+    fontSize: '1.1rem',
+  },
+})
+
 export const Container = styled(Box, {
-  margin: '$6 auto 0',
+  position: 'relative',
   padding: 0,
   display: 'grid',
-  maxWidth: '100%',
-  position: 'relative',
   border: 'none',
 
   variants: {

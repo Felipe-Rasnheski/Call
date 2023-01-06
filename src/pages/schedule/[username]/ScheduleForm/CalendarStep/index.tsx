@@ -1,3 +1,4 @@
+import { Button } from '@ignite-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -5,6 +6,7 @@ import { useState } from 'react'
 import { Calendar } from '../../../../../components/Calendar'
 import { api } from '../../../../../lib/axios'
 import {
+  CalendarContainer,
   Container,
   PickerContainer,
   TimerPicker,
@@ -66,30 +68,42 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   }
 
   return (
-    <Container isTimePickerOpen={isDateSelected}>
-      <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
-      {isDateSelected && (
-        <PickerContainer>
-          <TimerPicker>
-            <TimerPickerHeader>
-              {weekDay} <span>{describedDate}</span>
-            </TimerPickerHeader>
-            <TimerPickerList>
-              {availability?.possibleTimes.map((hour) => {
-                return (
-                  <TimerPickerItem
-                    key={hour}
-                    onClick={() => handleSelectTime(hour)}
-                    disabled={!availability.availableTimes.includes(hour)}
-                  >
-                    {String(hour).padStart(2, '0')}:00h
-                  </TimerPickerItem>
-                )
-              })}
-            </TimerPickerList>
-          </TimerPicker>
-        </PickerContainer>
-      )}
-    </Container>
+    <CalendarContainer>
+      <Button
+        variant="tertiary"
+        size="sm"
+        onClick={() => router.push(`/profile/${username}`)}
+      >
+        Voltar
+      </Button>
+      <Container isTimePickerOpen={isDateSelected}>
+        <Calendar
+          selectedDate={selectedDate}
+          onDateSelected={setSelectedDate}
+        />
+        {isDateSelected && (
+          <PickerContainer>
+            <TimerPicker>
+              <TimerPickerHeader>
+                {weekDay} <span>{describedDate}</span>
+              </TimerPickerHeader>
+              <TimerPickerList>
+                {availability?.possibleTimes.map((hour) => {
+                  return (
+                    <TimerPickerItem
+                      key={hour}
+                      onClick={() => handleSelectTime(hour)}
+                      disabled={!availability.availableTimes.includes(hour)}
+                    >
+                      {String(hour).padStart(2, '0')}:00h
+                    </TimerPickerItem>
+                  )
+                })}
+              </TimerPickerList>
+            </TimerPicker>
+          </PickerContainer>
+        )}
+      </Container>
+    </CalendarContainer>
   )
 }
