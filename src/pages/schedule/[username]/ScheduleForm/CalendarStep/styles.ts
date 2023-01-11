@@ -9,6 +9,10 @@ export const CalendarContainer = styled('div', {
     fontWeight: 'bold',
     fontSize: '1.1rem',
   },
+
+  '@media(max-width: 600px)': {
+    fontSize: '75%',
+  },
 })
 
 export const Container = styled(Box, {
@@ -25,11 +29,21 @@ export const Container = styled(Box, {
         '@media (max-width: 900px)': {
           gridTemplateColumns: '1fr',
         },
+
+        '@media(max-width: 600px)': {
+          fontSize: '75%',
+          margin: '$2',
+        },
       },
       false: {
         width: 540,
         margin: '$4 auto',
         gridTemplateColumns: '1fr',
+
+        '@media(max-width: 600px)': {
+          fontSize: '75%',
+          margin: '$2',
+        },
       },
     },
   },
@@ -52,6 +66,11 @@ export const TimerPicker = styled('div', {
   bottom: 0,
   right: 0,
   width: 280,
+
+  '@media(max-width: 500px)': {
+    fontSize: '75%',
+    padding: '$2 $2 0',
+  },
 
   '@media (max-width: 900px)': {
     position: 'relative',

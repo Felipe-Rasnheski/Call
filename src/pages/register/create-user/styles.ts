@@ -4,6 +4,11 @@ export const Container = styled('main', {
   maxWidth: 572,
   margin: '$6 auto $4',
   padding: '0 $4',
+
+  '@media(max-width: 500px)': {
+    fontSize: '75%',
+    padding: '0 $2',
+  },
 })
 
 export const Header = styled('div', {
@@ -16,6 +21,11 @@ export const Header = styled('div', {
   [`> ${Text}`]: {
     color: '$gray200',
     marginBottom: '$6',
+  },
+
+  '@media(max-width: 500px)': {
+    fontSize: '75%',
+    padding: '0 $2',
   },
 })
 

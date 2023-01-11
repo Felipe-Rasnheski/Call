@@ -5,6 +5,11 @@ export const IntervalBox = styled(Box, {
   display: 'flex',
   flexDirection: 'column',
   gap: '$2',
+
+  '@media(max-width: 600px)': {
+    fontSize: '75%',
+    marginTop: '$2',
+  },
 })
 
 export const IntervalsContainer = styled('div', {
@@ -21,6 +26,11 @@ export const IntervalItem = styled('div', {
 
   '& + &': {
     borderTop: '1px solid $gray600',
+  },
+
+  '@media(max-width: 600px)': {
+    fontSize: '75%',
+    padding: '$2',
   },
 })
 

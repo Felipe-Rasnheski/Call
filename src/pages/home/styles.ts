@@ -25,6 +25,11 @@ export const HeaderContent = styled('div', {
     width: '$10',
   },
 
+  '@media(max-width: 600px)': {
+    padding: '$2',
+    fontSize: '75%',
+  },
+
   '@media (min-width: 1430px)': {
     img: {
       marginLeft: '$10',
@@ -60,7 +65,7 @@ export const Main = styled('main', {
   margin: '0 auto',
 
   '@media(max-width: 600px)': {
-    paddingRight: '$10',
+    padding: '$2',
   },
 })
 
@@ -76,10 +81,6 @@ export const Hero = styled('div', {
   [`> ${Text}`]: {
     marginTop: '$2',
     color: '$gray200',
-
-    '@media(max-width: 600px)': {
-      fontSize: '$md',
-    },
   },
 })
 

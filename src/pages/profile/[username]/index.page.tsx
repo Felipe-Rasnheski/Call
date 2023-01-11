@@ -232,7 +232,6 @@ export default function Profile() {
           </Description>
 
           {user && (
-            // <UpdateUserForm user={user} setUser={setUser} />
             <Toggle onClick={() => setUpdateUserToggle(true)}>
               <PencilLine />
             </Toggle>

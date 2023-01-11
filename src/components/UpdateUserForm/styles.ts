@@ -5,9 +5,12 @@ export const Container = styled(Box, {
   padding: '$4',
   width: '70%',
   maxWidth: 500,
+  minWidth: 'fit-content',
 
-  '@media (max-width: 500px)': {
-    fontSize: '$sm',
+  '@media(max-width: 600px)': {
+    fontSize: '75%',
+    padding: '$1',
+    margin: '$4 auto',
   },
 })
 
@@ -35,6 +38,11 @@ export const Form = styled('form', {
     [`> ${TextInput}`]: {
       fontFamily: '$default',
     },
+  },
+
+  '@media(max-width: 600px)': {
+    fontSize: '75%',
+    padding: '$1',
   },
 })
 

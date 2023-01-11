@@ -11,6 +11,16 @@ export const Container = styled(Box, {
     flexDirection: 'column',
     fontSize: '$sm',
   },
+
+  '@media(max-width: 600px)': {
+    fontSize: '75%',
+    padding: '$2',
+    margin: '$4',
+  },
+
+  '@media(max-width: 500px)': {
+    margin: '$2',
+  },
 })
 
 export const ProfileInfo = styled('div', {
@@ -32,6 +42,7 @@ export const ProfileInfo = styled('div', {
 
   '@media (max-width: 500px)': {
     alignItems: 'center',
+    padding: '$2',
   },
 
   '@media (max-width: 460px)': {
@@ -124,6 +135,12 @@ export const Schedule = styled('div', {
 
     h1: {
       flex: 1,
+    },
+
+    '@media(max-width: 600px)': {
+      h1: {
+        opacity: 0,
+      },
     },
   },
 })
