@@ -1,18 +1,9 @@
-<style>
-  .container {
-    text-align: center;
-  }
-</style>
-
 # Descomplique sua agenda 🔥
 ## 🔗 <a href="https://call-pi.vercel.app/">call-pi.vercel.app</a>
 
-<div class="container">
-  <a href="https://call-pi.vercel.app/"><img src="./public/call.svg" height="30" width="30" /></a>
-  <div>
-    <a href="#design">Design System</a> |
-    <a href="#tecnologias">Tecnologias</a>
-  </div>
+<div>
+  <a href="#design">Design System</a> |
+  <a href="#tecnologias">Tecnologias</a>
 </div>
 
 <br/>
