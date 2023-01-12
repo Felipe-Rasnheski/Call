@@ -15,11 +15,11 @@
   </div>
 </div>
 
-</br>
+<br/>
 
 <img src="./public/capa.png" />
 
-</br>
+<br/>
 
 <h1 id="design">Design System 🌈</h1> 
 <p >
@@ -27,7 +27,7 @@
   site <a href="https://rocketseat-education.github.io/05-design-system/?path=/story/home--page">design-system</a>
 </p>
 
-</br>
+<br/>
 
 <h1 id="tecnologias">Tecnologias 🖥</h1> 
 <ul>
@@ -40,3 +40,7 @@
   <li><a href="https://next-auth.js.org/">next-auth</a></li>
   <li><a href="https://www.npmjs.com/package/googleapis">googleapis</a></li>
 </ul>
+
+<hr/>
+
+<footer>Feito com 💚 Felipe Souza</footer>
