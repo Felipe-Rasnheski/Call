@@ -215,7 +215,7 @@ export default function Profile() {
 
   return (
     <>
-      <NextSeo title={`${user?.username} | Call`} noindex />
+      {user?.username && <NextSeo title={`${user.username} | Call`} noindex />}
       <Container>
         <ProfileInfo>
           <UserAvatar>

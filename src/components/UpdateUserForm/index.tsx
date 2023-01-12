@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
+import { NextSeo } from 'next-seo'
 import { CheckCircle, X } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -90,55 +91,58 @@ export function UpdateUserForm({
   }
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit(handleUpdateProfile)}>
-        <ButtonClose onClick={() => toggleOpen(false)}>
-          <X size={24} />
-        </ButtonClose>
+    <>
+      <NextSeo title={`${user?.username} | Call`} noindex />
+      <Container>
+        <Form onSubmit={handleSubmit(handleUpdateProfile)}>
+          <ButtonClose onClick={() => toggleOpen(false)}>
+            <X size={24} />
+          </ButtonClose>
 
-        <h1>Editar Perfil</h1>
-        <label>
-          <Text size="sm">Nome completo</Text>
-          <TextInput placeholder="seu nome" {...register('name')} />
-          {errors.name && (
-            <FormError size="sm">{errors.name.message}</FormError>
-          )}
-        </label>
-        <label>
-          <Text size="sm">Nome de usuário</Text>
-          <TextInput
-            prefix="call.vercelApp/"
-            placeholder="seu-usuario"
-            {...register('username')}
-          />
-          {errors.username && (
-            <FormError size="sm">{errors.username.message}</FormError>
-          )}
-        </label>
+          <h1>Editar Perfil</h1>
+          <label>
+            <Text size="sm">Nome completo</Text>
+            <TextInput placeholder="seu nome" {...register('name')} />
+            {errors.name && (
+              <FormError size="sm">{errors.name.message}</FormError>
+            )}
+          </label>
+          <label>
+            <Text size="sm">Nome de usuário</Text>
+            <TextInput
+              prefix="call.vercelApp/"
+              placeholder="seu-usuario"
+              {...register('username')}
+            />
+            {errors.username && (
+              <FormError size="sm">{errors.username.message}</FormError>
+            )}
+          </label>
 
-        <label>
-          <Text size="sm">Email</Text>
-          <TextInput type="email" {...register('email')} />
-          {errors.email && (
-            <FormError size="sm">{errors.email.message}</FormError>
-          )}
-        </label>
+          <label>
+            <Text size="sm">Email</Text>
+            <TextInput type="email" {...register('email')} />
+            {errors.email && (
+              <FormError size="sm">{errors.email.message}</FormError>
+            )}
+          </label>
 
-        <label>
-          <Text size="sm">Sobre Você</Text>
-          <TextArea {...register('bio')} placeholder="Opcional..." />
-        </label>
+          <label>
+            <Text size="sm">Sobre Você</Text>
+            <TextArea {...register('bio')} placeholder="Opcional..." />
+          </label>
 
-        <FormActions>
-          <Button type="submit" variant="secondary" disabled={isSubmitting}>
-            Confirmar
-            <CheckCircle />
-          </Button>
-          <Button type="submit" onClick={() => toggleOpen(false)}>
-            Cancelar
-          </Button>
-        </FormActions>
-      </Form>
-    </Container>
+          <FormActions>
+            <Button type="submit" variant="secondary" disabled={isSubmitting}>
+              Confirmar
+              <CheckCircle />
+            </Button>
+            <Button type="submit" onClick={() => toggleOpen(false)}>
+              Cancelar
+            </Button>
+          </FormActions>
+        </Form>
+      </Container>
+    </>
   )
 }

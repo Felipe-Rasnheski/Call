@@ -32,9 +32,9 @@ export default function Home() {
   function handleLogin() {
     if (session.status === 'authenticated') {
       router.push(`profile/${session.data.user.username}`)
+    } else {
+      handleRegistration()
     }
-
-    handleRegistration()
   }
 
   return (

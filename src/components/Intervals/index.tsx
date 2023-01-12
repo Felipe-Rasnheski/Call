@@ -163,7 +163,7 @@ export function Intervals({ navigate, varianty }: TimeIntervalsProps) {
 
       {varianty === 'first' && (
         <Button disabled={isSubmitting}>
-          Próximo passo <ArrowRight />
+          Finalizar <ArrowRight />
         </Button>
       )}
 

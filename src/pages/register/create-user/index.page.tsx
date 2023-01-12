@@ -142,7 +142,7 @@ export default function CreateUser() {
           </label>
 
           <Button type="submit" disabled={isSubmitting}>
-            Finalizar
+            Próximo passo
             <ArrowRight />
           </Button>
         </ProfileBox>
